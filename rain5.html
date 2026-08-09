@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第五章</title>
+<style>
+  :root {
+    --color-primary: #7BAED4;
+    --color-primary-light: #A8C8E0;
+    --color-primary-lighter: #E8F0F8;
+    --color-accent: #B8A9D4;
+    --color-accent-light: #DDD0EE;
+    --color-accent-lighter: #F3EEF8;
+    --color-bg: #FFFFFF;
+    --color-text: #3A3A3A;
+    --color-text-light: #6A6A6A;
+    --color-text-lighter: #9A9A9A;
+    --color-line: #E8E8E8;
+    --radius: 8px;
+    --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif;
+    --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.8;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .main-container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 60px;
+  }
+  .chapter-header {
+    text-align: center;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--color-line);
+    margin-bottom: 32px;
+  }
+  .chapter-title {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 1px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .chapter-intro {
+    background: linear-gradient(to right, var(--color-primary-lighter), var(--color-accent-lighter));
+    border-left: 3px solid var(--color-primary-light);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.92rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+  }
+  .chapter-intro .intro-label {
+    font-size: 0.78rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .author-note-wrapper {
+    margin: 28px 0;
+    border: 1.5px dashed var(--color-accent-light);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .author-note-wrapper .note-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: var(--color-accent-lighter);
+    cursor: pointer;
+    user-select: none;
+  }
+  .author-note-wrapper .note-header:hover { background: var(--color-accent-light); }
+  .author-note-wrapper .note-title {
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .author-note-wrapper .note-toggle {
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    transition: transform 0.3s;
+  }
+  .author-note-wrapper.collapsed .note-toggle { transform: rotate(-90deg); }
+  .author-note-wrapper .note-body {
+    padding: 14px 20px;
+    font-size: 0.88rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+    white-space: pre-wrap;
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .author-note-wrapper.collapsed .note-body {
+    max-height: 0;
+    padding: 0 20px;
+  }
+  .chapter-content {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    line-height: 2.2;
+    color: #2D2D2D;
+    letter-spacing: 0.5px;
+  }
+  .chapter-content p {
+    text-indent: 2em;
+    margin-bottom: 0.8em;
+  }
+  .chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
+    gap: 12px;
+  }
+  .chapter-nav a, .chapter-nav .nav-placeholder {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    border: 1.5px solid var(--color-primary-light);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
+  }
+  .chapter-nav a:hover {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+  .chapter-nav .nav-placeholder {
+    color: var(--color-text-lighter);
+    border-color: var(--color-line);
+    cursor: default;
+  }
+  .deco-line {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-primary-light), var(--color-accent-light), transparent);
+    margin: 40px 0;
+    border: none;
+  }
+  .content-empty-hint {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-text-lighter);
+  }
+  .content-empty-hint .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5; }
+  ::selection { background: var(--color-primary-lighter); color: var(--color-primary); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-primary-light); border-radius: 3px; }
+  @media (max-width: 640px) {
+    .main-container { padding: 40px 16px; }
+    .chapter-title { font-size: 1.35rem; }
+    .chapter-content { font-size: 1rem; line-height: 2.1; }
+    .chapter-nav a, .chapter-nav .nav-placeholder {
+      min-width: 90px; padding: 8px 12px; font-size: 0.82rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="main-container">
+
+  <div class="chapter-header">
+    <h1 class="chapter-title">第五章</h1>
+  </div>
+
+    <div class="chapter-intro">
+      <div class="intro-label">📋 简介</div>
+      <div>蕾丝颈环/吃醋/吐血/晕倒</div>
+    </div>
+  <div class="chapter-content">
+        <p>直到有店员来交班，钟雨辰才得以从柜台里脱身。奈明夜已经走了，甜品店里有些空荡，秦鹤却还静静坐在椅子上，夕阳斜斜地照在他身上，纤长的睫毛在白瓷一样的脸颊上投出一小片阴影，整个人像一件精致脆弱的艺术品。<br>　　“在等我？”钟雨辰走到他面前，意外地看到他手心里的杯子蛋糕还是完完整整的，“怎么不吃呀，你不是有低血糖吗？”<br>　　秦鹤精致的脸上漾起一丝笑意，如同湖上被微风吹起的涟漪：“很漂亮，舍不得吃。”<br>　　因为是你送给我的。<br>　　“店里有的是，有什么舍不得吃的。”钟雨辰托着秦鹤冰凉的手，把蛋糕凑到他嘴边，“吃掉。你一下午都没吃东西了，这样不行的。”<br>　　被女孩温软的手包裹着，秦鹤一阵安心，听话地把杯子蛋糕吃掉。店内安静异常，店员正低头认真地打 switch，除了顾客进门的声音，没有任何动静能惊动他。<br>　　秦鹤的唇角沾上了一点奶油，钟雨辰伸手托住他的下巴，却迟迟没有下一步动作：“这也是故意的吗？”<br>　　秦鹤呼吸一滞，抬眼看着她。她果然什么都知道，是最聪明的女孩子。可是他这次真的不是故意的，也不知如何开口解释让她相信，只能可怜地冲她摇头。下一秒，女孩的指腹不轻不重地抚过他唇角，又把奶油蹭到他唇心。<br>　　“自己舔掉。”她的声音很小，只有他们两个人能听见，却在秦鹤心里掀起巨大的波澜。<br>　　秦鹤伸出一点红润的舌尖，缓慢地把雪白的奶油卷进口中。他察觉到钟雨辰的目光几乎瞬间黏在他的舌尖上，又有些遗憾地看着他收回。<br>　　“是关于稿子，有点事想请你帮忙。”秦鹤轻声开口，气息不稳，“可以去我家一趟吗？”<br>　　再次坐进秦鹤家里时，钟雨辰不禁开始反思自己，到底为什么每次都能轻易地被秦鹤拐过来。面前突然出现一只漂亮的手，指间搭着一段做工精细的纯白蕾丝，尾端缓缓飘动。<br>　　“你的书里有个男角色戴着这个，我得在漫画里画出来，”他微微皱起秀气的眉，很苦恼的样子，“我找不到参考，只能自己戴，但是一个人又拍不出合适角度的照片……”<br>　　他身子太弱，说了这么长的话，只能停下来喘息着缓了缓。钟雨辰捏住蕾丝的尾端，轻轻一拉，柔软的蕾丝就水一样从他纤长的手指之间流走。<br>　　“大作家可不可以……帮帮我？”<br>　　他们来到光线比较好的卧室里。秦鹤坐在床上，拢起乌黑的长发，让它们垂到一边的肩头，露出雪白脆弱的后颈。钟雨辰捏着蕾丝的两端，将蕾丝覆在他喉结上，向后微微拉紧，让蕾丝在他颈上完整地缠绕一圈，在他颈后系上一个蝴蝶结固定。<br>　　“紧吗？”她的手指有意无意地在他颈侧轻抚一下。<br>　　“还好。”秦鹤轻喘了一下，手支在身后勉强撑着身体，仰头将完整的颈部露出来。纯白的精致蕾丝包裹住他的喉结，形成一个小小的凸起，随着他的呼吸微弱地起伏。他的皮肤太脆弱了，已经被蕾丝的边缘磨得有点泛红，衬得其他肌肤越发白皙。<br>　　钟雨辰忍住内心的悸动，拿出手机按照秦鹤的要求拍下参考照片。照片很快就拍完了，秦鹤却丝毫没有解开的意思，他小心翼翼地牵过钟雨辰的手，引着她的指尖往自己的喉间移动。<br>　　“你不想解开吗？”钟雨辰轻声问。<br>　　“反正已经系上了，那就不要浪费……”秦鹤的眼睛又泛起水光，他手臂一软，无力地向后倒去，陷在柔软的床铺里，长发在耳边散开。钟雨辰手里的手机一下子掉在地毯上，人则被他带得前倾，她用手撑在他身侧，将他压在身下。<br>　　她的指尖终于触到那片蕾丝，隔着蕾丝在他的颈上游走。秦鹤忍不住轻轻颤抖，孱弱的心脏越发疯狂地跳动，几乎让他承受不住，黑瞳被快感推着几次向上顶起，露出两片眼白，却强忍着没有躲避。覆盖着的蕾丝让传来的触感更加复杂，在他脆弱敏感的皮肤上激起酥麻。他张开双唇急促地喘息，越发渴求地追寻着她的气息，忍不住微微抬起头，将双唇凑上去。<br>　　钟雨辰垂着眼看他，用手指轻轻抵住他的唇瓣：“要做什么？”<br>　　秦鹤的凤眼微微泛红，气息轻软，声音中带着隐约委屈的哭腔：“求你……别拒绝我……”</p>
+  </div>
+
+
+    <div class="chapter-nav">
+      <a href="rain4.html">← 上一章</a>
+      <a href="rain6.html">下一章 →</a>
+    </div>
+
+</div>
+<script>
+function toggleNote() {
+  var el = document.getElementById('author-note');
+  if (el) el.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>

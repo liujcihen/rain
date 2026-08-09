@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>眷雨 · 章节合集</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue-50:  #f0f4ff;
+    --blue-100: #dbe6ff;
+    --blue-200: #b8ccff;
+    --blue-300: #8eb4ff;
+    --purple-50:  #f5f0ff;
+    --purple-100: #e8dcff;
+    --purple-200: #d4beff;
+    --purple-300: #b89aff;
+    --text-dark:  #3a3560;
+    --text-mid:   #6b6399;
+    --text-light: #9b94c4;
+    --card-bg:    rgba(255,255,255,0.72);
+    --card-hover: rgba(255,255,255,0.92);
+    --shadow:     0 4px 24px rgba(120, 110, 200, 0.12);
+    --shadow-hover: 0 8px 40px rgba(120, 110, 200, 0.22);
+    --radius:     16px;
+    --transition: all 0.35s cubic-bezier(.4,0,.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Noto Serif SC", "WenQuanYi Micro Hei", "PingFang SC", "Microsoft YaHei", serif;
+    min-height: 100vh;
+    color: var(--text-dark);
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(184,196,255,0.35), transparent),
+      radial-gradient(ellipse 70% 50% at 85% 20%, rgba(200,180,255,0.30), transparent),
+      radial-gradient(ellipse 60% 50% at 50% 90%, rgba(170,190,255,0.25), transparent),
+      linear-gradient(160deg, #eef2ff 0%, #f5f0ff 40%, #ede7ff 70%, #e8eeff 100%);
+    background-attachment: fixed;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .top-ornament {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--blue-300), var(--purple-300), transparent);
+    opacity: 0.6;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 36px 18px 56px;
+  }
+
+  /* ===== 头部 ===== */
+  .header {
+    text-align: center;
+    margin-bottom: 12px;
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .header .book-title {
+    font-size: clamp(1.9rem, 5.5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    background: linear-gradient(135deg, #6c8cef, #9b7bf0, #7c6cef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+    position: relative;
+    display: inline-block;
+  }
+
+  .header .book-title::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue-300), var(--purple-300));
+    border-radius: 2px;
+  }
+
+  .header .author {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    letter-spacing: 0.15em;
+  }
+
+  .header .author span {
+    display: inline-block;
+    padding: 1px 10px;
+    border: 1px solid var(--purple-200);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.5);
+  }
+
+  .header .synopsis {
+    margin-top: 20px;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.9;
+    padding: 0 6px;
+    animation: fadeIn 1.2s ease 0.3s both;
+  }
+
+  .header .synopsis::before,
+  .header .synopsis::after {
+    content: " ✦ ";
+    color: var(--purple-300);
+    font-style: normal;
+    font-size: 0.85em;
+  }
+
+  /* ===== 工具栏 ===== */
+  .toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 26px 0 20px;
+    animation: fadeIn 1s ease 0.5s both;
+  }
+
+  .toolbar .label {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    letter-spacing: 0.1em;
+  }
+
+  .order-toggle {
+    position: relative;
+    display: flex;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--blue-100);
+    border-radius: 26px;
+    padding: 2px;
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow);
+  }
+
+  .order-toggle button {
+    position: relative;
+    z-index: 1;
+    border: none;
+    background: transparent;
+    padding: 6px 18px;
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    border-radius: 22px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    letter-spacing: 0.08em;
+  }
+
+  .order-toggle button.active {
+    color: #fff;
+  }
+
+  .order-toggle .slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: calc(100% - 4px);
+    border-radius: 22px;
+    background: linear-gradient(135deg, var(--blue-300), var(--purple-300));
+    transition: var(--transition);
+    z-index: 0;
+  }
+
+  /* ===== 章节列表 ===== */
+  .chapter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: fadeInUp 0.8s ease 0.6s both;
+  }
+
+  /* ===== 卡片 ===== */
+  .chapter-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(200, 190, 255, 0.35);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .chapter-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(140,165,255,0.06), rgba(180,155,255,0.06));
+    opacity: 0;
+    transition: var(--transition);
+    pointer-events: none;
+  }
+
+  .chapter-card:hover {
+    transform: translateY(-2px);
+    background: var(--card-hover);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(170, 155, 255, 0.55);
+  }
+
+  .chapter-card:hover::before { opacity: 1; }
+
+  .chapter-card .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .chapter-card .chapter-num {
+    font-size: 0.76rem;
+    color: var(--text-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .chapter-card .chapter-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.05em;
+  }
+
+  /* 阅前必读特殊样式 */
+  .chapter-card.special {
+    border-color: rgba(155, 130, 255, 0.4);
+    background: rgba(245, 240, 255, 0.78);
+  }
+
+  .chapter-card.special .chapter-num {
+    color: #8b7be0;
+    font-weight: 600;
+  }
+
+  /* ===== 动画 ===== */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .chapter-list.sorting .chapter-card {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 600px) {
+    .container { padding: 24px 12px 44px; }
+    .header .book-title { letter-spacing: 0.2em; }
+    .header .synopsis { font-size: 0.86rem; padding: 0; }
+    .chapter-card { padding: 14px 16px; border-radius: 14px; }
+    .chapter-card .chapter-title { font-size: 0.98rem; }
+    .order-toggle button { padding: 5px 15px; font-size: 0.78rem; }
+    .toolbar { gap: 8px; }
+  }
+
+  /* ===== 暗色模式 ===== */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text-dark:  #e8e4ff;
+      --text-mid:   #b8b0dd;
+      --text-light: #8e87b8;
+      --card-bg:    rgba(40, 38, 70, 0.72);
+      --card-hover: rgba(50, 46, 85, 0.92);
+    }
+    body {
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(80,90,160,0.35), transparent),
+        radial-gradient(ellipse 70% 50% at 85% 20%, rgba(100,80,160,0.30), transparent),
+        linear-gradient(160deg, #1a1830 0%, #221e3d 40%, #1d1a35 70%, #1a1d35 100%);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-ornament"></div>
+
+<div class="container">
+
+  <header class="header">
+    <h1 class="book-title">眷雨</h1>
+    <div class="author"><span>作者 · 处处回响</span></div>
+    <p class="synopsis">白切黑作家女大 × 长发心机病弱男美人</p>
+  </header>
+
+  <div class="toolbar">
+    <span class="label">排列</span>
+    <div class="order-toggle" id="orderToggle">
+      <span class="slider" id="slider"></span>
+      <button class="active" data-order="asc">正序</button>
+      <button data-order="desc">倒序</button>
+    </div>
+  </div>
+
+  <nav class="chapter-list" id="chapterList"></nav>
+
+</div>
+
+<script>
+  const chapters = [
+    {
+      file: "rain0",
+      num: "阅前必读",
+      title: "高山流水遇知音",
+      special: true
+    },
+    {
+      file: "rain1",
+      num: "第一章",
+      title: "心脏病 / 晕倒 / 翻白眼"
+    },
+    {
+      file: "rain2",
+      num: "第二章",
+      title: "耳坠 / 真丝上衣 / 虐腹"
+    },
+    {
+      file: "rain3",
+      num: "第三章",
+      title: "耳坠 / 真丝上衣 / 虐腹"
+    },
+    {
+      file: "rain4",
+      num: "第四章",
+      title: "蕾丝颈环 / 吃醋 / 吐血 / 晕倒"
+    },
+    {
+      file: "rain5",
+      num: "第五章",
+      title: "蕾丝颈环 / 吃醋 / 吐血 / 晕倒"
+    },
+    {
+      file: "rain6",
+      num: "第六章",
+      title: "心脏病 / 吐血"
+    },
+    {
+      file: "rain7",
+      num: "第七章",
+      title: "憋尿 / 刺激 / 晕厥"
+    },
+    {
+      file: "rain8",
+      num: "第八章",
+      title: "憋尿 / 刺激 / 晕厥"
+    },
+    {
+      file: "rain9",
+      num: "第九章",
+      title: "金丝眼镜 / 口腔逗弄"
+    },
+    {
+      file: "rain10",
+      num: "第十章",
+      title: "故意淋雨 / 湿身 / 浴缸"
+    }
+  ];
+
+  const listEl    = document.getElementById("chapterList");
+  const toggleEl  = document.getElementById("orderToggle");
+  const sliderEl  = document.getElementById("slider");
+  const buttons   = toggleEl.querySelectorAll("button");
+
+  let currentOrder = "asc";
+
+  function render(order) {
+    const data = order === "asc" ? chapters.slice() : chapters.slice().reverse();
+
+    listEl.classList.add("sorting");
+
+    setTimeout(() => {
+      listEl.innerHTML = data.map((ch, i) => `
+        <a class="chapter-card ${ch.special ? "special" : ""}"
+           href="${ch.file}.html"
+           style="animation: fadeInUp 0.4s ease ${i * 0.05}s both;">
+          <div class="card-top">
+            <span class="chapter-num">${ch.num}</span>
+          </div>
+          <div class="chapter-title">${ch.title}</div>
+        </a>
+      `).join("");
+
+      listEl.classList.remove("sorting");
+    }, 150);
+  }
+
+  function moveSlider(targetBtn) {
+    const rect = targetBtn.getBoundingClientRect();
+    const parentRect = toggleEl.getBoundingClientRect();
+    const offset = rect.left - parentRect.left;
+    sliderEl.style.width = rect.width + "px";
+    sliderEl.style.transform = `translateX(${offset - 2}px)`;
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const order = btn.dataset.order;
+      if (order === currentOrder) return;
+      currentOrder = order;
+
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      moveSlider(btn);
+      render(order);
+    });
+  });
+
+  moveSlider(buttons[0]);
+  render("asc");
+
+  window.addEventListener("resize", () => {
+    const activeBtn = toggleEl.querySelector("button.active");
+    moveSlider(activeBtn);
+  });
+</script>
+
+</body>
+</html>

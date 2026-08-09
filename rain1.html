@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第一章</title>
+<style>
+  :root {
+    --color-primary: #7BAED4;
+    --color-primary-light: #A8C8E0;
+    --color-primary-lighter: #E8F0F8;
+    --color-accent: #B8A9D4;
+    --color-accent-light: #DDD0EE;
+    --color-accent-lighter: #F3EEF8;
+    --color-bg: #FFFFFF;
+    --color-text: #3A3A3A;
+    --color-text-light: #6A6A6A;
+    --color-text-lighter: #9A9A9A;
+    --color-line: #E8E8E8;
+    --radius: 8px;
+    --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif;
+    --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.8;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .main-container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 60px;
+  }
+  .chapter-header {
+    text-align: center;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--color-line);
+    margin-bottom: 32px;
+  }
+  .chapter-title {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 1px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .chapter-intro {
+    background: linear-gradient(to right, var(--color-primary-lighter), var(--color-accent-lighter));
+    border-left: 3px solid var(--color-primary-light);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.92rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+  }
+  .chapter-intro .intro-label {
+    font-size: 0.78rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .author-note-wrapper {
+    margin: 28px 0;
+    border: 1.5px dashed var(--color-accent-light);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .author-note-wrapper .note-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: var(--color-accent-lighter);
+    cursor: pointer;
+    user-select: none;
+  }
+  .author-note-wrapper .note-header:hover { background: var(--color-accent-light); }
+  .author-note-wrapper .note-title {
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .author-note-wrapper .note-toggle {
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    transition: transform 0.3s;
+  }
+  .author-note-wrapper.collapsed .note-toggle { transform: rotate(-90deg); }
+  .author-note-wrapper .note-body {
+    padding: 14px 20px;
+    font-size: 0.88rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+    white-space: pre-wrap;
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .author-note-wrapper.collapsed .note-body {
+    max-height: 0;
+    padding: 0 20px;
+  }
+  .chapter-content {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    line-height: 2.2;
+    color: #2D2D2D;
+    letter-spacing: 0.5px;
+  }
+  .chapter-content p {
+    text-indent: 2em;
+    margin-bottom: 0.8em;
+  }
+  .chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
+    gap: 12px;
+  }
+  .chapter-nav a, .chapter-nav .nav-placeholder {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    border: 1.5px solid var(--color-primary-light);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
+  }
+  .chapter-nav a:hover {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+  .chapter-nav .nav-placeholder {
+    color: var(--color-text-lighter);
+    border-color: var(--color-line);
+    cursor: default;
+  }
+  .deco-line {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-primary-light), var(--color-accent-light), transparent);
+    margin: 40px 0;
+    border: none;
+  }
+  .content-empty-hint {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-text-lighter);
+  }
+  .content-empty-hint .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5; }
+  ::selection { background: var(--color-primary-lighter); color: var(--color-primary); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-primary-light); border-radius: 3px; }
+  @media (max-width: 640px) {
+    .main-container { padding: 40px 16px; }
+    .chapter-title { font-size: 1.35rem; }
+    .chapter-content { font-size: 1rem; line-height: 2.1; }
+    .chapter-nav a, .chapter-nav .nav-placeholder {
+      min-width: 90px; padding: 8px 12px; font-size: 0.82rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="main-container">
+
+  <div class="chapter-header">
+    <h1 class="chapter-title">第一章</h1>
+  </div>
+
+    <div class="chapter-intro">
+      <div class="intro-label">📋 简介</div>
+      <div>心脏病/晕倒/翻白眼</div>
+    </div>
+  <div class="chapter-content">
+        <p>对面坐着的实在是个美人。<br>　　钟雨辰半蹲着身子，一边擦柜台一边偷偷抬眼看他。感谢妈咪非要让她放假在这里看店，才让她能看到这么漂亮的男人。那人看起来不过二十五六岁，一头黑色长发柔顺地披下来，绸缎般落到挂着白衬衫的清瘦肩膀。他微微低着头，眼睫垂下遮住了一半勾人的凤眼，脸色苍白，唇色也极淡，只唇心有一点湿润的微红，似乎是自己咬出来的。他交叠的长腿上放着一个 ipad，手里的笔不断动着。<br>　　美人突然蹙了蹙眉，轻轻喘了口气，声音落在安静的甜品店里有些突兀。钟雨辰回过神来，莫名有些心虚，干脆回到收银台打开电脑写明天的更新。她刻意让自己沉浸在文字里，不知道过了多久，一声清脆的餐具落地声传了过来。<br>　　她抬起头，发现餐桌边的美人已经仰靠在了墙上，白皙的脖颈拉出脆弱的弧度，纤长的手指轻柔搭在心脏的位置，好像连自己按揉缓解一下的力气都没有。他的眼皮闭合不拢，黑眸痛苦地向上顶起，翻出两片眼白。他整个人已经控制不住地向下滑去，钟雨辰赶紧从柜台里跑出来，勉强扶住他瘫软的身体。<br>　　直到凑近了，钟雨辰才听到美人微张的双唇正不断地发出喘息声。他无力的身体毫无反抗地软在她臂弯里，这副病美人的样子不偏不倚地击中她，让她心跳有些加速。<br>　　"先生？先生？"钟雨辰轻轻拍了拍美人白皙光滑的脸颊，他柔软的脖颈顺着她的力道一折，微微发烫的头颅就倚在了她的颈窝里。她心头一跳，美人看着已经快要不行了，得赶紧打 120。就在她要伸手拿手机的时候，怀里的人儿突然微微颤了颤。<br>　　"嗯呃……"美人虚弱地喘出一口气，上翻的眼睛微微回落，目光虚软地望向钟雨辰，"没事……咳咳，一会儿就好了。"<br>　　钟雨辰的手臂圈着美人细得惊人的腰身，看着他苍白惨淡的面容，一时很难相信他嘴里的话。纠结了片刻，还是妥协道："那我有什么能做的吗？"<br>　　美人已经勉强撑着身体离开钟雨辰的怀抱，胳膊撑在餐桌上，把额头靠在手心，顺滑的黑发垂落，遮住一半细瘦的腕骨。这番动作又耗费了他所剩无几的体力，身体摇晃了几下，才勉强稳住。<br>　　女孩的怀抱很温暖，身上还沾了淡淡的咖啡香气，刚刚借着朦胧的视线，他也看到她脸上的红晕和眼中的兴奋。<br>　　但现在还不是时候。<br>　　钟雨辰怀里骤然变得空落落的，不禁有些失落地虚握了一下手指。<br>　　"谢谢你……我自己可以回，啊……"美人撑着桌子站起身，却腿软得根本支撑不住，头颅骤然向后仰，整个人翻着白眼直直地坠下去。他晕得实在太美，在钟雨辰眼中如同慢放，她一时愣住，差点来不及接住他的身体。<br>　　"先生，我叫您家人来接您？"<br>　　美人头抵着钟雨辰的肩膀，修长的手指轻轻攥住钟雨辰的衣襟，难受得眼角都有些泛红："我在这边一个人住……没什么认识的人。"<br>　　他脆弱依赖的模样让钟雨辰恨不得把他直接捡回家去。但哪怕她已经算是个小有名气的作者，在家长眼里也只是个还没上完学的小女孩，随便捡个男人回去一定会被骂死的。<br>　　等等，她怎么真的在考虑把他捡回家的可能性了？！<br>　　"马上有人来交班，我送您回家吧。"钟雨辰干脆利落地说，一手扶着美人，一手弯腰将他掉在地上的 ipad 和笔捡起来。她看了眼屏幕，和她猜测的一样，他是个漫画家，屏幕上是一张漫画草稿，起型很标准。<br>　　钟雨辰帮他把东西装好，从他微弱的气音中艰难辨认出住址，在地图上点开导航。兼职的收银员正好走进来，她简单打了声招呼，就扶着美人走了出去。美人头颅微仰，整个人被钟雨辰支撑着，脚步虚浮地行走。他身材修长，还好钟雨辰个子偏高，今天又穿了厚底鞋，才勉强能撑住他。<br>　　"辰辰。"美人病得昏昏沉沉，忍不住很轻地呢喃了一声。<br>　　嗯？在喊她吗？钟雨辰有些疑惑，但他声音太小，也可能是她听错了。<br>　　美人家离得很近，与甜品店隔了不到一条街，位置就在一楼。这个小区安静整洁，一楼每户人家门前还有一个小小的院子。钟雨辰扶着他走过门前长着杂草的石板路，到门口时美人几乎已经没有一点力气，颤抖着手输入了密码和指纹，门开的刹那便浑身卸力，无知无觉地昏在钟雨辰怀里。</p>
+  </div>
+
+
+    <div class="chapter-nav">
+      <span class="nav-placeholder">← 上一章</span>
+      <a href="rain2.html">下一章 →</a>
+    </div>
+
+</div>
+<script>
+function toggleNote() {
+  var el = document.getElementById('author-note');
+  if (el) el.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>

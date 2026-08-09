@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第十章</title>
+<style>
+  :root {
+    --color-primary: #7BAED4;
+    --color-primary-light: #A8C8E0;
+    --color-primary-lighter: #E8F0F8;
+    --color-accent: #B8A9D4;
+    --color-accent-light: #DDD0EE;
+    --color-accent-lighter: #F3EEF8;
+    --color-bg: #FFFFFF;
+    --color-text: #3A3A3A;
+    --color-text-light: #6A6A6A;
+    --color-text-lighter: #9A9A9A;
+    --color-line: #E8E8E8;
+    --radius: 8px;
+    --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif;
+    --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.8;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .main-container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 60px;
+  }
+  .chapter-header {
+    text-align: center;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--color-line);
+    margin-bottom: 32px;
+  }
+  .chapter-title {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 1px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .chapter-intro {
+    background: linear-gradient(to right, var(--color-primary-lighter), var(--color-accent-lighter));
+    border-left: 3px solid var(--color-primary-light);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.92rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+  }
+  .chapter-intro .intro-label {
+    font-size: 0.78rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .author-note-wrapper {
+    margin: 28px 0;
+    border: 1.5px dashed var(--color-accent-light);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .author-note-wrapper .note-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: var(--color-accent-lighter);
+    cursor: pointer;
+    user-select: none;
+  }
+  .author-note-wrapper .note-header:hover { background: var(--color-accent-light); }
+  .author-note-wrapper .note-title {
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .author-note-wrapper .note-toggle {
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    transition: transform 0.3s;
+  }
+  .author-note-wrapper.collapsed .note-toggle { transform: rotate(-90deg); }
+  .author-note-wrapper .note-body {
+    padding: 14px 20px;
+    font-size: 0.88rem;
+    color: var(--color-text-light);
+    line-height: 1.9;
+    white-space: pre-wrap;
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .author-note-wrapper.collapsed .note-body {
+    max-height: 0;
+    padding: 0 20px;
+  }
+  .chapter-content {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    line-height: 2.2;
+    color: #2D2D2D;
+    letter-spacing: 0.5px;
+  }
+  .chapter-content p {
+    text-indent: 2em;
+    margin-bottom: 0.8em;
+  }
+  .chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
+    gap: 12px;
+  }
+  .chapter-nav a, .chapter-nav .nav-placeholder {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    border: 1.5px solid var(--color-primary-light);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
+  }
+  .chapter-nav a:hover {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+  .chapter-nav .nav-placeholder {
+    color: var(--color-text-lighter);
+    border-color: var(--color-line);
+    cursor: default;
+  }
+  .deco-line {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-primary-light), var(--color-accent-light), transparent);
+    margin: 40px 0;
+    border: none;
+  }
+  .content-empty-hint {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-text-lighter);
+  }
+  .content-empty-hint .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5; }
+  ::selection { background: var(--color-primary-lighter); color: var(--color-primary); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-primary-light); border-radius: 3px; }
+  @media (max-width: 640px) {
+    .main-container { padding: 40px 16px; }
+    .chapter-title { font-size: 1.35rem; }
+    .chapter-content { font-size: 1rem; line-height: 2.1; }
+    .chapter-nav a, .chapter-nav .nav-placeholder {
+      min-width: 90px; padding: 8px 12px; font-size: 0.82rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="main-container">
+
+  <div class="chapter-header">
+    <h1 class="chapter-title">第十章</h1>
+  </div>
+
+    <div class="chapter-intro">
+      <div class="intro-label">📋 简介</div>
+      <div>故意淋雨/湿身/浴缸</div>
+    </div>
+  <div class="chapter-content">
+        <p>这座城市迎来了阴雨绵绵的天气。钟雨辰望着窗外的雨丝，轻轻摁开手机，看到秦鹤发来的消息：“还不能来吗？”<br>　　秦鹤发的是文字，钟雨辰却几乎能想象到他的语气，轻软的、可怜的，夹杂着些微虚弱的喘息。几天未见，她对他也万分思念，告诉了他一声她现在就过去，便拎起一把雨伞走出门外。<br>　　她不断加快着步伐，临近目的地时却渐渐停住，有些难以置信地看着前方。不远处站着一个模特般顷长高瘦的身影，正撑着一把黑色的雨伞，朝着她来的方向凝望着。她认清了那果然是秦鹤，心中焦急，赶紧再次加快步伐，下一秒却看到秦鹤冲自己露出一个破碎的微笑，撑着雨伞的纤长手臂慢动作般在空中划过一条弧线，雨伞悄然坠地。<br>　　雨幕似是受到召唤一般，忽然大了起来，细密的雨丝淋在秦鹤身上，白衬衫逐渐被打湿，紧密地贴合在他的身体上，勾勒出他平直的肩膀和纤细优美的腰线，甚至他胸前的两点因为被凉意激到，变得有些硬挺，让衬衫上显现出两点凸起的淡红色。他的胸口因不适而微微起伏，整个人在雨帘中轻晃，摇摇欲坠。<br>　　“秦鹤！”钟雨辰撑着雨伞跑到他身边，接住他湿透的身体，感受到一怀的柔软冰凉。秦鹤的长睫上沾着晶莹的水珠，随着他眨眼的动作颤抖着，在脸上泪珠一般流淌。<br>　　“想你……”他轻声呢喃着，漂亮湿润的长发贴在他面颊上，“我的身体好看吗？”<br>　　 女孩秀气的眉头皱了起来：“你是故意的。”<br>　　秦鹤的身体更软地塌陷下去，除了柔软的腰部被钟雨辰托着向上顶起，纤薄身体的其余部分都软软往下垂坠着轻晃，如同一怀绸缎。他的头颅极致地向后仰去，脆弱的喉结毫不设防地袒露在钟雨辰面前，墨瞳因重力而向下落进眼眶，只在眼缝中留着两道嫩白。她小心翼翼地把手垫在他背上将他托起来，他的头也跟着晃了晃，只是眼瞳依旧没有转回来，一双美目半睁着白眼，淡粉色的双唇也无力合上，已经是昏得不省人事。<br>　　钟雨辰的心又疼又软，也舍不得再说他什么，半扶半抱着把他带进家门。她一手要撑伞，一手还要扶着他，进了门后就累得不行，只能把秦鹤暂时放在地板上。她甩了甩酸痛的胳膊，低头看到美人正微微蜷缩身体昏在一滩水里，纤腰塌下去，一双长腿交叠在一起。<br>　　“秦鹤……”她蹲下身，双臂托住秦鹤腋下，微微用力把他提起。秦鹤的双臂无力下垂，头也毫无生气地低下去，被拖到沙发上仰面躺着。他苍白的脸颊湿漉漉的，如同刚从湖中打捞起的一轮明月。他似乎感受到了什么，上翻着的眼睛微微颤了颤，终于回落下来。只是这次的恢复十分勉强，他的瞳孔明显地在逐渐涣散，似乎一个不注意就会再次上翻过去。他纤薄的身体随着呼吸微微起伏着，衬得身上的曲线越发诱人，钟雨辰终于忍不住将手贴了上去。<br>　　被雨水浇得冰冷的身体突然感受到她的体温，被触到的那块皮肤如同灼烧一般，让秦鹤的身体忍不住微微一颤，贝齿轻咬嘴唇，眼睛倏忽上翻一瞬，两片莹润的眼白一闪而过。就算已经被刺激成这样，对她也没有丝毫的反抗。<br>　　他胸前粉嫩的两点透过半透明的湿衬衫脆弱地展现在她眼前，钟雨辰用指尖在一点上轻轻蹭了蹭，听到怀中人一声极其微弱的哼吟。<br>　　“嗯……”秦鹤的黑瞳已经彻底隐没在眼眶中，被极致的眩晕和快感折磨得战栗，身体无力地在她怀里舒展开来，即使寒意越发旺盛，也再没有力气把自己的身体蜷缩起来。钟雨辰叹了口气，去浴室给浴缸放上热水，然后回来一颗一颗解开秦鹤胸前的扣子，将紧贴在他身上的衬衫剥下来。他白皙的皮肤沾着水汽，白玉一般润泽微凉。<br>　　过了一会儿，钟雨辰终于将他的衣物全部脱下，包括最贴身的衣物。美人修长的身体不着寸缕地躺在沙发上，钟雨辰克制住自己的目光，把他抱进浴室，轻轻放在已经盛满热水的浴缸中。<br>　　秦鹤的颈项柔软无力，后脑压在冰凉的浴缸边缘，头颅往后仰着，拉出修长的脖颈线条，精致的喉结无助地凸起。钟雨辰慌忙去扶他的头，美人的头颅静静躺在他掌心，黑发间依旧是那一张柔弱俊美的小脸，眼缝中泄露着两丝眼白，鲜红的小舌不知什么时候吐了出来，软软地搭在嘴角。</p>
+  </div>
+
+
+    <div class="chapter-nav">
+      <a href="rain9.html">← 上一章</a>
+      <a href="rain11.html">下一章 →</a>
+    </div>
+
+</div>
+<script>
+function toggleNote() {
+  var el = document.getElementById('author-note');
+  if (el) el.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>
