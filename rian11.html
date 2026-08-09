@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>未完待续</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e8d5ff 0%, #d4e4ff 50%, #e8d5ff 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
+  }
+
+  @keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* 漂浮光点 */
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    animation: float linear infinite;
+    filter: blur(1px);
+  }
+  @keyframes float {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 70px 80px;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow:
+      0 8px 32px rgba(150, 120, 220, 0.18),
+      0 2px 8px rgba(120, 160, 220, 0.12),
+      inset 0 1px 0 rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.5);
+    animation: cardFadeIn 1.2s ease forwards;
+  }
+
+  @keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .title {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, #9b7df5, #6fa8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 50px;
+    position: relative;
+  }
+
+  .title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    margin: 18px auto 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #b9a0ff, #8ec0ff);
+  }
+
+  .links { display: flex; flex-direction: column; gap: 28px; }
+
+  .link-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    color: #5a4a7a;
+    transition: transform 0.3s ease;
+  }
+
+  .link-item:hover { transform: translateX(4px); }
+
+  .link-item a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 22px;
+    background: linear-gradient(135deg, #f0e6ff, #e0ecff);
+    box-shadow: 0 4px 14px rgba(160, 140, 220, 0.25);
+    transition: all 0.35s ease;
+    margin-left: 4px;
+  }
+
+  .link-item a:hover {
+    transform: scale(1.18);
+    box-shadow: 0 6px 22px rgba(160, 120, 230, 0.4);
+    background: linear-gradient(135deg, #e4d4ff, #cddfff);
+  }
+
+  .link-label {
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  .arrow {
+    color: #b9a0ff;
+    font-size: 18px;
+    margin: 0 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- 漂浮粒子 -->
+<div class="particles" id="particles"></div>
+
+<div class="card">
+  <div class="title">未完待续</div>
+  <div class="links">
+    <div class="link-item">
+      <span class="link-label">评论与催更</span>
+      <span class="arrow">→</span>
+      <a href="https://v.wjx.cn/vm/Qw05T7d.aspx" target="_blank" rel="noopener noreferrer" title="评论与催更">❤️</a>
+    </div>
+    <div class="link-item">
+      <span class="link-label">期待的情节</span>
+      <span class="arrow">→</span>
+      <a href="https://v.wjx.cn/vm/PAtVPG6.aspx" target="_blank" rel="noopener noreferrer" title="期待的情节">❤️</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 生成漂浮光点
+  const container = document.getElementById('particles');
+  const COUNT = 22;
+  for (let i = 0; i < COUNT; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    const size = Math.random() * 8 + 4;
+    p.style.width  = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left   = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+    p.style.animationDelay    = (Math.random() * 12) + 's';
+    container.appendChild(p);
+  }
+</script>
+
+</body>
+</html>
